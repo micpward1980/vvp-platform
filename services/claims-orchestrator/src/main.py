@@ -6,11 +6,11 @@ from datetime import datetime
 import os, httpx
 
 SERVICE = os.getenv("SERVICE_NAME","claims-orchestrator")
-VERIFY_URL = os.getenv("ORCH_VERIFICATION_URL","http://verification-service:8000")
-VALUE_URL  = os.getenv("ORCH_VALUATION_URL","http://valuation-service:8000")
-PAY_URL    = os.getenv("ORCH_PAYMENT_URL","http://payment-service:8000")
-AUDIT_URL  = os.getenv("ORCH_AUDIT_URL","http://audit-service:8000")
-VIN_URL    = os.getenv("ORCH_VIN_URL","http://vin-monitor:8000")
+VERIFY_URL = os.getenv("ORCH_VERIFICATION_URL","http://localhost:8001")
+VALUE_URL  = os.getenv("ORCH_VALUATION_URL","http://localhost:8002")
+PAY_URL    = os.getenv("ORCH_PAYMENT_URL","http://localhost:8003")
+AUDIT_URL  = os.getenv("ORCH_AUDIT_URL","http://localhost:8005")
+VIN_URL    = os.getenv("ORCH_VIN_URL","http://localhost:8004")
 
 app = FastAPI(title=SERVICE)
 
