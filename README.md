@@ -1,4 +1,41 @@
-# VVP Platform - Vehicle Value Protection Microservices
+# VVP Platform - One-Click Deployment
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/micpward1980/vvp-platform/tree/devin/1757471412-simple-deployment)
+
+## Quick Deploy (1 Click!)
+
+1. **Click the "Deploy to Render" button above**
+2. **Sign up with GitHub** (if you haven't already)
+3. **Click "Create Web Service"** 
+4. **Wait 5-10 minutes** for deployment
+5. **Your VVP platform will be live!**
+
+## What You Get
+
+- **Permanent public URL** that stays online 24/7
+- **All 6 microservices** running in one container
+- **Web UI** for testing claims
+- **Free hosting** on Render's free tier
+
+## Testing Your Deployment
+
+Once deployed, test with these VINs:
+- **VIN ending in "1"**: Clean history → ESCALATED status, $0 payout
+- **VIN ending in "0"**: Hail damage → PAID status, with payout amount
+
+## Alternative: Manual Deploy
+
+If the button doesn't work:
+1. Go to [render.com](https://render.com)
+2. Sign up with GitHub
+3. Click "New" → "Web Service"
+4. Connect this repository: `micpward1980/vvp-platform`
+5. Select branch: `devin/1757471412-simple-deployment`
+6. Render will auto-detect the Dockerfile and deploy
+
+---
+
+## About VVP Platform
 
 A comprehensive microservices platform for processing vehicle insurance claims with automated verification, valuation, and payment processing.
 

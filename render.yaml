@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: vvp-platform
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    buildCommand: ""
+    startCommand: ""
+    envVars:
+      - key: PORT
+        value: 3000
