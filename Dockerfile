@@ -6,6 +6,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     nginx \
     supervisor \
+    gettext-base \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
@@ -16,9 +17,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY services/ ./services/
 COPY web-ui/ ./web-ui/
 
-# Create nginx config for web UI that uses PORT environment variable
+# Create nginx config template for web UI that uses PORT environment variable
 RUN echo 'server {\n\
-    listen ${PORT:-3000};\n\
+    listen $PORT;\n\
     server_name localhost;\n\
     root /app/web-ui;\n\
     index index.html;\n\
@@ -39,7 +40,7 @@ RUN echo 'server {\n\
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n\
         proxy_set_header X-Forwarded-Proto $scheme;\n\
     }\n\
-}' > /etc/nginx/sites-available/default
+}' > /etc/nginx/sites-available/default.template
 
 # Create supervisor config to run all services
 RUN echo "[supervisord]\n\
@@ -88,8 +89,8 @@ autorestart=true" > /etc/supervisor/conf.d/supervisord.conf
 
 # Create startup script that substitutes PORT variable in nginx config
 RUN echo '#!/bin/bash\n\
-envsubst < /etc/nginx/sites-available/default > /etc/nginx/sites-available/default.tmp\n\
-mv /etc/nginx/sites-available/default.tmp /etc/nginx/sites-available/default\n\
+export PORT=${PORT:-3000}\n\
+envsubst "\\$PORT" < /etc/nginx/sites-available/default.template > /etc/nginx/sites-available/default\n\
 exec supervisord -c /etc/supervisor/conf.d/supervisord.conf' > /app/start.sh && chmod +x /app/start.sh
 
 EXPOSE ${PORT:-3000}
