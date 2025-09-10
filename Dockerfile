@@ -16,9 +16,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY services/ ./services/
 COPY web-ui/ ./web-ui/
 
-# Create nginx config for web UI
+# Create nginx config for web UI that uses PORT environment variable
 RUN echo 'server {\n\
-    listen 3000;\n\
+    listen ${PORT:-3000};\n\
     server_name localhost;\n\
     root /app/web-ui;\n\
     index index.html;\n\
@@ -86,6 +86,12 @@ command=nginx -g \"daemon off;\"\n\
 autostart=true\n\
 autorestart=true" > /etc/supervisor/conf.d/supervisord.conf
 
-EXPOSE 3000
+# Create startup script that substitutes PORT variable in nginx config
+RUN echo '#!/bin/bash\n\
+envsubst < /etc/nginx/sites-available/default > /etc/nginx/sites-available/default.tmp\n\
+mv /etc/nginx/sites-available/default.tmp /etc/nginx/sites-available/default\n\
+exec supervisord -c /etc/supervisor/conf.d/supervisord.conf' > /app/start.sh && chmod +x /app/start.sh
 
-CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+EXPOSE ${PORT:-3000}
+
+CMD ["/app/start.sh"]
