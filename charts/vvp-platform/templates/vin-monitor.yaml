@@ -1,0 +1,1 @@
+{{- include "vvp.deployment" (dict "name" "vin-monitor" "replicas" .Values.replicas.vinMonitor "image" .Values.images.vinMonitor "Values" .Values "Release" .Release) -}}

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VVP Claims Platform - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+        
+        .form-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .form-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        
+        .status-paid {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-approved {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-escalated {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-filed {
+            background: #cce7ff;
+            color: #004085;
+        }
+        
+        .claim-details {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .detail-value {
+            color: #6c757d;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 VVP Claims Platform</h1>
+            <p>Vehicle Verification & Payment System - Client Demo</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="form-section">
+                <h2>📋 Submit New Claim</h2>
+                <form id="claimForm">
+                    <div class="form-group">
+                        <label for="policyId">Policy ID</label>
+                        <input type="text" id="policyId" name="policyId" value="P-1001" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="holderName">Policy Holder Name</label>
+                        <input type="text" id="holderName" name="holderName" value="Alex Driver" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="vin">Vehicle VIN</label>
+                        <input type="text" id="vin" name="vin" value="1HGCM82633A004351" required minlength="11" maxlength="32">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lossDate">Loss Date</label>
+                        <input type="datetime-local" id="lossDate" name="lossDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lossType">Loss Type</label>
+                        <select id="lossType" name="lossType" required>
+                            <option value="hail" selected>Hail Damage</option>
+                            <option value="flood">Flood Damage</option>
+                            <option value="other">Other Natural Hazard</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="repairReceipt">Repair Receipt</label>
+                        <input type="file" id="repairReceipt" name="repairReceipt" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx">
+                        <small style="color: #666; font-size: 14px; margin-top: 5px; display: block;">Upload repair receipt (JPG, PNG, PDF, DOC formats accepted)</small>
+                    </div>
+                    
+                    <button type="submit" class="btn" id="submitBtn">
+                        🚀 Submit Claim
+                    </button>
+                </form>
+            </div>
+            
+            <div class="results-section">
+                <h2>📊 Claim Results</h2>
+                <div id="results">
+                    <div class="loading">
+                        Submit a claim to see the automated processing results...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set default loss date to today
+        document.getElementById('lossDate').value = new Date().toISOString().slice(0, 16);
+        
+        document.getElementById('claimForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const resultsDiv = document.getElementById('results');
+            
+            // Disable form and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Processing Claim...';
+            resultsDiv.innerHTML = '<div class="loading">Processing claim through all microservices...</div>';
+            
+            try {
+                // Collect form data
+                const formData = new FormData(e.target);
+                const claimData = {
+                    policyId: formData.get('policyId'),
+                    holderName: formData.get('holderName'),
+                    vin: formData.get('vin'),
+                    lossDate: new Date(formData.get('lossDate')).toISOString(),
+                    lossType: formData.get('lossType'),
+                    details: formData.get('repairReceipt') ? formData.get('repairReceipt').name : "No receipt uploaded"
+                };
+                
+                // Submit claim to API using XMLHttpRequest to avoid credential URL issues
+                const response = await new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/api/claims');
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.onload = () => resolve({
+                        ok: xhr.status >= 200 && xhr.status < 300,
+                        status: xhr.status,
+                        statusText: xhr.statusText,
+                        json: () => Promise.resolve(JSON.parse(xhr.responseText))
+                    });
+                    xhr.onerror = () => reject(new Error('Network error'));
+                    xhr.send(JSON.stringify(claimData));
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                displayResults(result);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                resultsDiv.innerHTML = `
+                    <div class="error">
+                        <strong>Error:</strong> ${error.message}<br>
+                        Make sure the VVP platform is running on port 8000.
+                    </div>
+                `;
+            } finally {
+                // Re-enable form
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🚀 Submit Claim';
+            }
+        });
+        
+        function displayResults(claim) {
+            const resultsDiv = document.getElementById('results');
+            
+            // Determine status class
+            let statusClass = 'status-filed';
+            if (claim.status === 'PAID') statusClass = 'status-paid';
+            else if (claim.status === 'APPROVED') statusClass = 'status-approved';
+            else if (claim.status === 'ESCALATED') statusClass = 'status-escalated';
+            
+            // Format payout amount
+            const payoutAmount = claim.valuation?.payoutAmount || 0;
+            const fraudScore = claim.verification?.fraudScore || 0;
+            
+            resultsDiv.innerHTML = `
+                <div class="success">
+                    ✅ Claim processed successfully through all 6 microservices!
+                </div>
+                
+                <div class="status-indicator ${statusClass}">
+                    ${claim.status}
+                </div>
+                
+                <div class="claim-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Claim ID:</span>
+                        <span class="detail-value">${claim.claimId}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Policy Holder:</span>
+                        <span class="detail-value">${claim.holderName}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">VIN:</span>
+                        <span class="detail-value">${claim.vin}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Loss Type:</span>
+                        <span class="detail-value">${claim.lossType}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Payout Amount:</span>
+                        <span class="detail-value">$${payoutAmount.toLocaleString()}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Processing Time:</span>
+                        <span class="detail-value">${new Date(claim.updatedAt).toLocaleString()}</span>
+                    </div>
+                </div>
+                
+                ${claim.verification ? `
+                    <div class="claim-details">
+                        <h4>🔍 Verification Results</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Verified:</span>
+                            <span class="detail-value">${claim.verification.verified ? '✅ Yes' : '❌ No'}</span>
+                        </div>
+                    </div>
+                ` : ''}
+                
+                ${claim.verification && claim.verification.vehicleHistory ? `
+                    <div class="claim-details">
+                        <h4>🚗 Vehicle History (Auto-Retrieved)</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Title Status:</span>
+                            <span class="detail-value">${claim.verification.vehicleHistory.titleStatus}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Reported Incidents:</span>
+                            <span class="detail-value">${claim.verification.vehicleHistory.reportedIncidents.length} found</span>
+                        </div>
+                        ${claim.verification.vehicleHistory.reportedIncidents.length > 0 ? `
+                            <div class="detail-row">
+                                <span class="detail-label">Latest Incident:</span>
+                                <span class="detail-value">${claim.verification.vehicleHistory.reportedIncidents[0].type} on ${claim.verification.vehicleHistory.reportedIncidents[0].date}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                ` : ''}
+                
+                ${claim.valuation ? `
+                    <div class="claim-details">
+                        <h4>💰 Valuation Results</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Pre-incident Value:</span>
+                            <span class="detail-value">$${claim.valuation.preIncidentValue?.toLocaleString()}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Post Incident Value:</span>
+                            <span class="detail-value">$${claim.valuation.postIncidentValue?.toLocaleString()}</span>
+                        </div>
+                    </div>
+                ` : ''}
+                
+                ${claim.payment ? `
+                    <div class="claim-details">
+                        <h4>💳 Payment Results</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value">${claim.payment.status === 'success' ? '✅ Successful' : '❌ Failed'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Transaction ID:</span>
+                            <span class="detail-value">${claim.payment.transactionId}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Method:</span>
+                            <span class="detail-value">${claim.payment.method?.toUpperCase()}</span>
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+        }
+        
+        // Health check on page load using XMLHttpRequest to avoid credential URL issues
+        async function checkHealth() {
+            try {
+                const response = await new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', '/api/health');
+                    xhr.onload = () => resolve({
+                        ok: xhr.status >= 200 && xhr.status < 300,
+                        status: xhr.status
+                    });
+                    xhr.onerror = () => reject(new Error('Network error'));
+                    xhr.send();
+                });
+                if (response.ok) {
+                    console.log('✅ VVP Platform is healthy');
+                } else {
+                    console.warn('⚠️ VVP Platform health check failed');
+                }
+            } catch (error) {
+                console.error('❌ Cannot connect to VVP Platform:', error);
+            }
+        }
+        
+        checkHealth();
+    </script>
+</body>
+</html>

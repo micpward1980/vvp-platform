@@ -1,0 +1,6 @@
+apiVersion: v2
+name: vvp-platform
+description: VVP microservices (claims, verification, valuation, payments, vin monitor, audit)
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

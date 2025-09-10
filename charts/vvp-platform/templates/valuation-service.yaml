@@ -1,0 +1,1 @@
+{{- include "vvp.deployment" (dict "name" "valuation-service" "replicas" .Values.replicas.valuationService "image" .Values.images.valuationService "Values" .Values "Release" .Release) -}}

@@ -1,0 +1,22 @@
+replicas:
+  claimsOrchestrator: 2
+  verificationService: 2
+  valuationService: 2
+  paymentService: 2
+  vinMonitor: 1
+  auditService: 1
+
+images:
+  claimsOrchestrator: { repository: "REPLACE_ME", tag: "latest" }
+  verificationService: { repository: "REPLACE_ME", tag: "latest" }
+  valuationService: { repository: "REPLACE_ME", tag: "latest" }
+  paymentService: { repository: "REPLACE_ME", tag: "latest" }
+  vinMonitor: { repository: "REPLACE_ME", tag: "latest" }
+  auditService: { repository: "REPLACE_ME", tag: "latest" }
+
+commonEnv:
+  ORCH_VERIFICATION_URL: "http://verification-service:80"
+  ORCH_VALUATION_URL: "http://valuation-service:80"
+  ORCH_PAYMENT_URL: "http://payment-service:80"
+  ORCH_AUDIT_URL: "http://audit-service:80"
+  ORCH_VIN_URL: "http://vin-monitor:80"

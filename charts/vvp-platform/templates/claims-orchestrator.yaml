@@ -1,0 +1,1 @@
+{{- include "vvp.deployment" (dict "name" "claims-orchestrator" "replicas" .Values.replicas.claimsOrchestrator "image" .Values.images.claimsOrchestrator "Values" .Values "Release" .Release) -}}
