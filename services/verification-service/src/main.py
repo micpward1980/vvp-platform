@@ -88,7 +88,7 @@ async def lookup_vehicle_history(vin: str) -> Optional[VehicleHistory]:
         
         return VehicleHistory(
             vin=vin,
-            titleStatus="Clean" if not accident_history else "Rebuilt",
+            titleStatus="Clean",
             accidentHistory=accident_history,
             recallHistory=[],
             ownershipHistory=[{
@@ -165,7 +165,7 @@ async def verify(req: VerifyReq):
                     fraud += 0.5
                     print(f"DEBUG: Found matching incidents: {matching_incidents}")
             
-            if vehicle_history.titleStatus.lower() in ["salvage", "flood", "lemon"]:
+            if vehicle_history.titleStatus.lower() in ["salvage", "flood", "lemon", "rebuilt"]:
                 reasons.append("PROBLEMATIC_TITLE_STATUS")
                 fraud += 0.3
         else:
