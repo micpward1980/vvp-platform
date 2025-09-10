@@ -87,10 +87,19 @@ command=nginx -g \"daemon off;\"\n\
 autostart=true\n\
 autorestart=true" > /etc/supervisor/conf.d/supervisord.conf
 
-# Create startup script that substitutes PORT variable in nginx config
+# Create startup script with detailed logging
 RUN echo '#!/bin/bash\n\
+set -e\n\
+echo "=== VVP Container Startup ===" \n\
+echo "PORT environment: ${PORT:-3000}" \n\
 export PORT=${PORT:-3000}\n\
+echo "Substituting PORT=$PORT in nginx config..." \n\
 envsubst "\\$PORT" < /etc/nginx/sites-available/default.template > /etc/nginx/sites-available/default\n\
+echo "Generated nginx config:" \n\
+cat /etc/nginx/sites-available/default \n\
+echo "Testing nginx config..." \n\
+nginx -t \n\
+echo "Starting supervisor..." \n\
 exec supervisord -c /etc/supervisor/conf.d/supervisord.conf' > /app/start.sh && chmod +x /app/start.sh
 
 EXPOSE ${PORT:-3000}
